@@ -97,16 +97,21 @@
     displayManager = {
       gdm.enable = true;
       sddm.autoNumlock = true;
-      defaultSession = "none+awesome";
+      defaultSession = "none+i3";
+      # defaultSession = "none+awesome";
       setupCommands = ''
         ${pkgs.xlibs.xrandr}/bin/xrandr --output HDMI-0 --left-of DVI-I-1
       '';
     };
 
-    windowManager.awesome = {
+    windowManager.i3 = {
       enable = true;
-      luaModules = with pkgs.luaPackages; [ luarocks luadbi-mysql ];
     };
+
+    # windowManager.awesome = {
+    #   enable = true;
+    #   luaModules = with pkgs.luaPackages; [ luarocks luadbi-mysql ];
+    # };
   };
 
   # Enable CUPS to print documents.
@@ -141,7 +146,10 @@
     extraGroups = [ "users" "wheel" "nixos-config" "docker" ]; # Enable ‘sudo’ for the user.
   };
 
-  environment.variables.EDITOR = "vim";
+  environment.variables = {
+    EDITOR = "vim";
+    TERMINAL = "kitty";
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -196,6 +204,8 @@
     slack
     minecraft
     typora
+
+    polybarFull
 
     scrot
     xclip
