@@ -1,18 +1,19 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { lib, config, pkgs, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   /*nixpkgs.overlays = [ (self: super: {
     discord = super.discord.overrideAttrs (_: {
       src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz;
     });
   })]; */
 
-  imports = [ 
+  imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-20.09.tar.gz}/nixos")
@@ -105,6 +106,7 @@
     };
 
     windowManager.i3 = {
+      package = pkgs.i3-gaps;
       enable = true;
     };
 
@@ -158,7 +160,7 @@
     bat
     git
     screen
-    wget 
+    wget
     htop
     tree
     unzip
@@ -166,8 +168,8 @@
     pciutils
 
 
-    man-pages 
-    man-pages-posix 
+    man-pages
+    man-pages-posix
     gcc
     gdb
     glibc
@@ -197,6 +199,7 @@
     docker-compose
 
     firefox
+    thunderbird
     vlc
     kitty
     vscode
@@ -210,9 +213,10 @@
     scrot
     xclip
     xorg.xrandr
-    nitrogen
-    picom
+    compton
+    feh
     asciinema
+    killall
   ];
 
   documentation.dev.enable = true;
@@ -250,6 +254,7 @@
       dina-font
       proggyfonts
       roboto
+      nerdfonts
     ];
 
     fontconfig = {
@@ -279,4 +284,3 @@
   system.stateVersion = "20.09"; # Did you read the comment?
 
 }
-
