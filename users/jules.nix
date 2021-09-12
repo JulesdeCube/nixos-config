@@ -100,21 +100,24 @@
       };
 
       bash = {
-        enable = true;        
+        enable = true;
         historyIgnore = [ "fg" "ls" "ll" "la" ".." "cd" "exit" ];
         shellAliases = {
           ls = "ls --color=auto";
           la = "ls --color=auto -A";
           ll = "ls --color=auto -Alh";
           ".." = "cd ..";
+          icat = "kitty +kitten icat";
+          ssh = "kitty +kitten ssh";
+          term = "kitty --detach";
         };
         # initExtra = (builtins.readFile ./jules/.bashrc);
       };
 
       git = {
         enable = true;
-        userName = "Jules Lefebvre";
-        userEmail = "jules.lefebvre@epita.fr";
+        userName = "JulesdeCube";
+        userEmail = "juleslefebvre.pro@outlook.fr";
         aliases = {
           tree = "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all";
           lg = "log --abbrev-commit --decorate --format=format:'%C(bold blue)%h %C(bold red)<%an> %C(bold green)(%ar)%C(reset) %C(white)%s%C(bold yellow)%d%C(reset)'";
@@ -122,6 +125,11 @@
           b = "branch";
         };
         ignores = [ "*~" "*.swp" "*.d" "*.o" ];
+        extraConfig = {
+          init = {
+            defaultBranch = "main";
+          };
+        };
       };
 
       vim = {
@@ -162,8 +170,8 @@
           window_border_width = "0pt";
           window_margin_width = "5";
 
-          foreground = "#DCDCDC";
-          background = "#181818";
+          foreground = "#b4bbc9";
+          background = "#21252b";
 
           color0 = "#434C5E";
           color1 = "#FA5A77";
@@ -195,4 +203,3 @@
     };
   };
 }
-
