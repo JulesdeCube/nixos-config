@@ -1,24 +1,20 @@
+# Edit this configuration file to define what should be installed on your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ lib, config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+  imports =
+    [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  /*nixpkgs.overlays = [ (self: super: {
-    discord = super.discord.overrideAttrs (_: {
-      src = builtins.fetchTarball https://discord.com/api/download?platform=linux&format=tar.gz;
-    });
-  })]; */
-
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    (import "${builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-20.09.tar.gz}/nixos")
-    ./users/jules.nix
-  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
@@ -35,11 +31,20 @@
     };
   };
 
-  networking.hostName = "nixos_jules_desktop"; # Define your hostname.
+
+  networking.hostName = "nixos_jules_portable"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
+  # networking.useNetworkd = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Paris";
+
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.useDHCP = false;
+  # networking.interfaces.wlp0s20f0u4u2.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -48,9 +53,7 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-    packages = [ pkgs.terminus_font ];
-    # font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-v12n.psf.gz";
-    earlySetup = true;
+    font = "Lat2-Terminus16";
     keyMap = "us";
     colors = [
       "181818"
@@ -71,63 +74,64 @@
       "DCDCDC"
     ];
   };
-
-
-  hardware.nvidia.prime = {
-    sync.enable = true;
-
-    # Bus ID of the NVIDIA GPU. You can find it using lspci, either under 3D or VGA
-    nvidiaBusId = "PCI:1:0:0";
-
-    # Bus ID of the Intel GPU. You can find it using lspci, either under 3D or VGA
-    intelBusId = "PCI:0:0:0";
-  };
+  # services.udev.extraRules = "
+  # RUN+=\"/nix/store/i15v8lm5ayyrib20iicng9igmnsjvgqm-system-path/bin/chgrp video /sys/class/backlight/intel_backlight/brightness\"
+  # RUN+=\"/nix/store/i15v8lm5ayyrib20iicng9igmnsjvgqm-system-path/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness\"
+  # ";
+  hardware.bluetooth.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver = {
-    enable = true;
-
-    videoDrivers = [ "nvidia" ];
-
-    # Configure keymap in X11
-    layout = "us";
-    xkbOptions = "eurosign:e";
-
-    xrandrHeads = [ { output = "HDMI-0"; primary = true; } "DVI-I-1" ];
-
-    displayManager = {
-      gdm.enable = true;
-      sddm.autoNumlock = true;
-      defaultSession = "none+i3";
-      # defaultSession = "none+awesome";
-      setupCommands = ''
-        ${pkgs.xlibs.xrandr}/bin/xrandr --output HDMI-0 --left-of DVI-I-1
-      '';
-    };
-
-    windowManager.i3 = {
-      package = pkgs.i3-gaps;
       enable = true;
-    };
 
-    # windowManager.awesome = {
-    #   enable = true;
-    #   luaModules = with pkgs.luaPackages; [ luarocks luadbi-mysql ];
-    # };
+
+      # Enable the GNOME Desktop Environment.
+
+      displayManager.gdm.enable = true;
+      #displayManager.sddm.enable = true;
+
+      displayManager.defaultSession = "none+i3";
+      # displayManager.defaultSession = "none+bspwm";
+      # displayManager.defaultSession = "sway";
+
+
+      # desktopManager.gnome.enable = true;
+
+      # desktopManager.xfce = {
+      #   enable = true;
+      #   enableXfwm = false;
+      # };
+
+      # windowManager.bspwm.enable = true;
+      # windowManager.bspwm.package = "pkgs.bspwm-unstable";
+      # windowManager.bspwm.configFile = "/home/user/dotfiles/common/bspwm/bspwmrc";
+      # windowManager.bspwm.sxhkd.configFile= "/home/user/dotfiles/common/bspwm/sxhkdrc";
+
+      windowManager.i3 = {
+        enable = true;
+        package = pkgs.i3-gaps;
+      };
+
+      desktopManager.xterm.enable = false;
+      libinput.enable = true;
   };
+
+  services.gnome.gnome-keyring.enable = true; 
+
+
+  # Configure keymap in X11
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  services.fprintd.enable = true;
 
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  hardware.logitech.wireless.enable = true;
-  hardware.logitech.wireless.enableGraphical = true;
-
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.groups = {
@@ -139,90 +143,39 @@
     description = "Jules Lefebvre";
 
     isNormalUser = true;
-    useDefaultShell = true;
+    shell = pkgs.fish;
 
     createHome = true;
     home = "/home/jules";
 
     group = "jules";
-    extraGroups = [ "users" "wheel" "nixos-config" "docker" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "users" "wheel" "nixos-config" "docker" "video" ]; # Enable ‘sudo’ for the user.
   };
 
-  environment.variables = {
-    EDITOR = "vim";
-    TERMINAL = "kitty";
-  };
+  users.extraGroups.vboxusers.members = [ "jules" ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim
-    bat
     git
-    screen
-    wget
-    htop
-    tree
-    unzip
-    zip
+    vim 
     pciutils
-
 
     man-pages
     man-pages-posix
-    gcc
-    gdb
-    glibc
-    valgrind
-    gnumake
-
-    rustup
-    cargo
-
-    # dotnet-netcore
-    dotnet-sdk
-
-    python39
-    python39Packages.venvShellHook
-    python39Packages.virtualenv
-    python39Packages.ipykernel
-    pipenv
-    jupyter
-
-    sqlite
-
-    nodejs-16_x
-    # nodePackages.npm
-
-    jre8
+    htop
+    tree
+    wget
+    unzip
+    zip
 
     docker-compose
 
-    firefox
-    thunderbird
-    vlc
-    kitty
-    vscode
-    discord
-    slack
-    minecraft
-    typora
-
-    polybarFull
-
-    scrot
-    xclip
-    xorg.xrandr
-    compton
-    feh
-    asciinema
-    killall
+    home-manager
   ];
 
-  documentation.dev.enable = true;
-
+  virtualisation.virtualbox.host.enable = true;
   virtualisation.docker.enable = true;
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -236,38 +189,6 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  security.pam.services.gdm.enableGnomeKeyring = true;
-  services.gnome.gnome-keyring.enable = true;
-
-  fonts = {
-    enableDefaultFonts = true;
-
-    fonts = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      nerdfonts
-      liberation_ttf
-      fira-code
-      fira-code-symbols
-      mplus-outline-fonts
-      dina-font
-      proggyfonts
-      roboto
-      nerdfonts
-    ];
-
-    fontconfig = {
-      enable = true;
-      defaultFonts = {
-        serif = [ "DejaVu Serif" ];
-        emoji = [ "Noto Color Emoji" ];
-        sansSerif = [ "Roboto" ];
-        monospace = [ "Fira Code" ];
-      };
-    };
-  };
-
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -281,6 +202,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "21.05"; # Did you read the comment?
 
 }
+
