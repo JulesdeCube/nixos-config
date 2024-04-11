@@ -108,11 +108,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1710272323,
-        "narHash": "sha256-Y4+W+hjyo8SPfc9paja92ZyKSZ18Q3G0TKUTgOw0unA=",
+        "lastModified": 1710283014,
+        "narHash": "sha256-NkhNIgXkxU7XyZga6/457tPrWIRe57Rnwr5snYIBdaw=",
         "ref": "refs/heads/main",
-        "rev": "d59c0c2061ae631f4956241487406668b2044bdd",
-        "revCount": 112,
+        "rev": "da8696d656e5f0d169f19df38643b5aee29a4b87",
+        "revCount": 118,
         "type": "git",
         "url": "https://gitlab.julesdecube.com/julesdecube/home-manager"
       },

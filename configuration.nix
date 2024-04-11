@@ -94,6 +94,7 @@
     docker.enable = true;
     libvirtd.enable = true;
     spiceUSBRedirection.enable = true;
+    lxd.enable = true;
   };
 
   services = {
@@ -104,11 +105,10 @@
       videoDrivers = [ "intel" ];
 
       displayManager = {
-        sddm.enable = true;
-        # gdm = {
-        #   enable = true;
-        #   wayland = false;
-        # };
+        gdm = {
+          enable = true;
+          wayland = false;
+        };
         defaultSession = "none+i3";
       };
       desktopManager.xterm.enable = false;
@@ -163,7 +163,10 @@
       xscreensaver.fprintAuth = true;
     };
     pki.certificateFiles = [
-      (builtins.fetchurl { url = "https://raw.githubusercontent.com/path/to/my/file"; })
+      (builtins.fetchurl {
+        url = "https://vault.srs.epita.fr/v1/pki/ca/pem";
+        sha256 = "2275677c71e237c7d11a49997193018138884b1c6a9513f2eff4ce9d4545fd04";
+        })
     ];
   };
 
@@ -178,6 +181,18 @@
     };
 
     users = {
+      root = {
+        autoSubUidGidRange = false;
+
+        subGidRanges = [{
+          count = 655360;
+          startGid = 1000000;
+        }];
+        subUidRanges = [{
+          count = 655360;
+          startUid = 1000000;
+        }];
+      };
       jules = {
         description = "Jules Lefebvre";
 
@@ -200,6 +215,7 @@
           "uucp"
           "dialout"
           "libvirtd"
+          "lxd"
         ];
       };
     };
