@@ -122,7 +122,6 @@
         defaultSession = "none+i3";
       };
       desktopManager.xterm.enable = false;
-      windowManager.i3.enable = true;
 
       libinput.enable = true;
 
