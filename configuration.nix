@@ -260,8 +260,6 @@
 
     man-pages
     man-pages-posix
-
-    arandr
   ];
 
   system.stateVersion = "24.05";
