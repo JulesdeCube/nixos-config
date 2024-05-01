@@ -84,6 +84,11 @@
   hardware ={
     bluetooth.enable = true;
     pulseaudio.enable = true;
+    opengl = {
+      enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
+    };
   };
 
   systemd = {
@@ -96,6 +101,8 @@
     spiceUSBRedirection.enable = true;
     lxd.enable = true;
   };
+
+  security.polkit.enable = true;
 
   services = {
     spice-vdagentd.enable = true;
