@@ -89,6 +89,9 @@
       driSupport = true;
       driSupport32Bit = true;
     };
+    nvidia = {
+      modesetting.enable = true;
+    };
   };
 
   systemd = {
@@ -109,7 +112,7 @@
 
     xserver = {
       enable = true;
-      videoDrivers = [ "intel" ];
+      videoDrivers = [ "nvidia" ];
 
       displayManager = {
         gdm = {
