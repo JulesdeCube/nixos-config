@@ -75,8 +75,8 @@
     };
 
     firewall = {
-      checkReversePath = false;
-      enable = false;
+      checkReversePath = true;
+      enable = true;
     };
   };
 
