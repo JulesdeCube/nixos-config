@@ -178,12 +178,6 @@
       login.fprintAuth = true;
       xscreensaver.fprintAuth = true;
     };
-    pki.certificateFiles = [
-      (builtins.fetchurl {
-        url = "https://vault.srs.epita.fr/v1/pki/ca/pem";
-        sha256 = "2275677c71e237c7d11a49997193018138884b1c6a9513f2eff4ce9d4545fd04";
-        })
-    ];
   };
 
   home-manager = {
