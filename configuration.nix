@@ -104,33 +104,8 @@
       enable = true;
       videoDrivers = [ "nvidia" ];
 
-      displayManager = {
-        gdm = {
-          enable = true;
-        };
-        sessionPackages = [
-          (pkgs.stdenv.mkDerivation {
-            passthru.providedSessions = [ "xservice-wayland" ];
-            pname = "xservice-wayland";
-            version = "1.0.0";
-            src = ./.;
-
-            phases = ["installPhase"];
-            installPhase = ''
-              mkdir -p $out/share/wayland-sessions
-              cat > $out/share/wayland-sessions/xservice-wayland.desktop <<EOF
-              [Desktop Entry]
-              Name=Wayland-User
-              Exec=/bin/sh -c "\$HOME/.xsession-wayland"
-              Type=Application
-              EOF
-            '';
-          })
-        ];
-      };
       desktopManager.xterm.enable = false;
-
-      libinput.enable = true;
+      displayManager.gdm.enable = true;
 
       xkb = {
         layout = "us";
@@ -138,6 +113,29 @@
         options = "caps:escape";
       };
     };
+
+    displayManager.sessionPackages = [
+      (pkgs.stdenv.mkDerivation {
+        passthru.providedSessions = [ "xservice-wayland" ];
+        pname = "xservice-wayland";
+        version = "1.0.0";
+        src = ./.;
+
+        phases = [ "installPhase" ];
+        installPhase = ''
+          mkdir -p $out/share/wayland-sessions
+          cat > $out/share/wayland-sessions/xservice-wayland.desktop <<EOF
+          [Desktop Entry]
+          Name=Wayland-User
+          Exec=/bin/sh -c "\$HOME/.xsession-wayland"
+          Type=Application
+          EOF
+        '';
+      })
+    ];
+
+
+    libinput.enable = true;
 
     fprintd = {
       enable = true;
