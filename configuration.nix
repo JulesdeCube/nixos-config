@@ -97,18 +97,9 @@
     services.NetworkManager-wait-online.enable = false;
   };
 
-  virtualisation = {
-    docker.enable = true;
-    libvirtd.enable = true;
-    spiceUSBRedirection.enable = true;
-    lxd.enable = true;
-  };
-
   security.polkit.enable = true;
 
   services = {
-    spice-vdagentd.enable = true;
-
     xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];
@@ -207,18 +198,6 @@
     };
 
     users = {
-      root = {
-        autoSubUidGidRange = false;
-
-        subGidRanges = [{
-          count = 655360;
-          startGid = 1000000;
-        }];
-        subUidRanges = [{
-          count = 655360;
-          startUid = 1000000;
-        }];
-      };
       jules = {
         description = "Jules Lefebvre";
 
@@ -233,15 +212,12 @@
           "users"
           "wheel"
           "nixos-config"
-          "docker"
           "video"
           "audio"
           "networkmanager"
           "network"
           "uucp"
           "dialout"
-          "libvirtd"
-          "lxd"
         ];
       };
     };
