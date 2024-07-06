@@ -121,11 +121,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1713077896,
-        "narHash": "sha256-Noot8H0EZEAFRQWyGxh9ryvhK96xpIqKbh78X447JWs=",
+        "lastModified": 1715930644,
+        "narHash": "sha256-W9pyM3/vePxrffHtzlJI6lDS3seANQ+Nqp+i58O46LI=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "630a0992b3627c64e34f179fab68e3d48c6991c0",
+        "rev": "e3ad5108f54177e6520535768ddbf1e6af54b59d",
         "type": "github"
       },
       "original": {
@@ -301,11 +301,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1714575688,
-        "narHash": "sha256-QH6vv/GytBTzXkPMgaxllHJ0Iw6nI9nkbsPbK5Cd6ic=",
+        "lastModified": 1720286107,
+        "narHash": "sha256-ZkeFx9q7ctOk8bMmQJLtUHSw+6bEfI5I6ZtCB7w8aJk=",
         "ref": "refs/heads/main",
-        "rev": "204c0e493babf987c1383ebd47b235e743a564e2",
-        "revCount": 222,
+        "rev": "5e31599c952e9b3bf21746572c3c9976cc6491c5",
+        "revCount": 259,
         "type": "git",
         "url": "https://gitlab.julesdecube.com/infra/iac"
       },
@@ -321,11 +321,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1714575688,
-        "narHash": "sha256-QH6vv/GytBTzXkPMgaxllHJ0Iw6nI9nkbsPbK5Cd6ic=",
+        "lastModified": 1715664296,
+        "narHash": "sha256-A36YL7A8TrOV+kY/ND1cjT0L1CgHytpfaDOMQAX032A=",
         "ref": "refs/heads/main",
-        "rev": "204c0e493babf987c1383ebd47b235e743a564e2",
-        "revCount": 222,
+        "rev": "21021a1c25a28966ee3fd16575dd6677905b3e4e",
+        "revCount": 249,
         "type": "git",
         "url": "https://gitlab.julesdecube.com/infra/iac"
       },
@@ -353,11 +353,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1714578621,
-        "narHash": "sha256-/aa7Bt78s1h3cc9uNQV7l+qUIf8r9ATkVpwk19e0ItE=",
+        "lastModified": 1715978801,
+        "narHash": "sha256-ss0g7qqkZQqLVPtuDX0PSsU1gXDNJFEVYKlXzCUEjAQ=",
         "ref": "refs/heads/main",
-        "rev": "a82bcc59422336279da6abfffaba19277977f729",
-        "revCount": 134,
+        "rev": "67b3ac25aaff40165fda5baf7e4ef74057867621",
+        "revCount": 140,
         "type": "git",
         "url": "https://gitlab.julesdecube.com/julesdecube/home-manager"
       },
@@ -368,27 +368,27 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1714253743,
-        "narHash": "sha256-mdTQw2XlariysyScCv2tTE45QSU9v/ezLcHJ22f0Nxc=",
+        "lastModified": 1719956923,
+        "narHash": "sha256-nNJHJ9kfPdzYsCOlHOnbiiyKjZUW5sWbwx3cakg3/C4=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "58a1abdbae3217ca6b702f03d3b35125d88a2994",
+        "rev": "706eef542dec88cc0ed25b9075d3037564b2d164",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixos-unstable",
+        "ref": "nixos-24.05",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1714253743,
-        "narHash": "sha256-mdTQw2XlariysyScCv2tTE45QSU9v/ezLcHJ22f0Nxc=",
+        "lastModified": 1714906307,
+        "narHash": "sha256-UlRZtrCnhPFSJlDQE7M0eyhgvuuHBTe1eJ9N9AQlJQ0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "58a1abdbae3217ca6b702f03d3b35125d88a2994",
+        "rev": "25865a40d14b3f9cf19f19b924e2ab4069b09588",
         "type": "github"
       },
       "original": {
@@ -401,10 +401,6 @@
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
-        "flake-utils": [
-          "iac",
-          "futils"
-        ],
         "gitignore": "gitignore",
         "nixpkgs": [
           "iac",
@@ -416,11 +412,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1714478972,
-        "narHash": "sha256-q//cgb52vv81uOuwz1LaXElp3XAe1TqrABXODAEF6Sk=",
+        "lastModified": 1719259945,
+        "narHash": "sha256-F1h+XIsGKT9TkGO3omxDLEb/9jOOsI6NnzsXFsZhry4=",
         "owner": "cachix",
         "repo": "pre-commit-hooks.nix",
-        "rev": "2849da033884f54822af194400f8dff435ada242",
+        "rev": "0ff4381bbb8f7a52ca4a851660fc7a437a4c6e07",
         "type": "github"
       },
       "original": {
