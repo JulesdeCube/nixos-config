@@ -2,14 +2,14 @@
   description = "Jules de Cube system configuration";
 
   inputs = {
-    iac.url = git+https://gitlab.julesdecube.com/infra/iac;
+    iac.url = "git+https://gitlab.julesdecube.com/infra/iac";
 
     nixpkgs.follows = "iac/nixpkgs";
     pre-commit-hooks.follows = "iac/pre-commit-hooks";
     futils.follows = "iac/futils";
 
     jdc-home-manager = {
-      url = git+https://gitlab.julesdecube.com/julesdecube/home-manager;
+      url = "git+https://gitlab.julesdecube.com/julesdecube/home-manager";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-utils.follows = "futils";
