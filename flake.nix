@@ -19,7 +19,7 @@
     home-manager.follows = "jdc-home-manager/home-manager";
   };
 
-  outputs ={ self, nixpkgs, futils, pre-commit-hooks, ... } @ attrs :
+  outputs = { self, nixpkgs, jdc-home-manager, futils, pre-commit-hooks, ... } @ attrs:
     let
       inherit (futils.lib) eachDefaultSystem;
 
@@ -29,16 +29,20 @@
           config = {
             allowUnfree = true;
           };
+          overlays = [ jdc-home-manager.overlays.default ];
         };
 
       globalOutput = {
-    nixosConfigurations = {
-      nixos-jules-portable = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = attrs;
-        modules = [ ./configuration.nix ];
-      };
-    };
+        nixosConfigurations = {
+          nixos-jules-portable = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = attrs;
+            modules = [{
+              nixpkgs.overlays = [ jdc-home-manager.overlays.default ];
+            }
+              ./configuration.nix];
+          };
+        };
       };
 
       systemOutput = system:

@@ -1,4 +1,4 @@
-{ jdc-home-manager,  home-manager, config, lib, pkgs, ... }:
+{ jdc-home-manager, home-manager, pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -17,7 +17,6 @@
   };
 
   boot = {
-
     kernelPackages = pkgs.linuxPackages_latest;
 
     loader = {
@@ -81,7 +80,7 @@
     };
   };
 
-  hardware ={
+  hardware = {
     bluetooth.enable = true;
     pulseaudio.enable = true;
     opengl = {
@@ -196,14 +195,15 @@
     ];
   };
 
-  home-manager.users = {
-    jules = "${jdc-home-manager}/home.nix";
+  home-manager = {
+    useGlobalPkgs = true;
+    users.jules = "${jdc-home-manager}/home.nix";
   };
 
   users = {
     groups = {
-      jules = {};
-      nixos-config = {};
+      jules = { };
+      nixos-config = { };
     };
 
     users = {
