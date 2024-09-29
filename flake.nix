@@ -30,15 +30,19 @@
         };
 
       globalOutput = {
-        nixosConfigurations = {
-          nixos-jules-portable = nixpkgs.lib.nixosSystem {
+        nixosConfigurations = rec {
+          default = nixpkgs.lib.nixosSystem {
             system = "x86_64-linux";
             specialArgs = attrs;
-            modules = [{
-              nixpkgs.overlays = [ jdc-home-manager.overlays.default ];
-            }
-              ./configuration.nix];
+            modules = [
+              { nixpkgs.overlays = [ jdc-home-manager.overlays.default ]; }
+              ./configuration.nix
+            ];
           };
+
+
+          "nixos-jules-portable.julesdecube.com" = default;
+          nixos-jules-portable = default;
         };
       };
 
