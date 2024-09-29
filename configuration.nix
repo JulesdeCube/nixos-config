@@ -187,7 +187,6 @@
   users = {
     groups = {
       jules = { };
-      nixos-config = { };
     };
 
     users = {
@@ -204,7 +203,6 @@
         extraGroups = [
           "users"
           "wheel"
-          "nixos-config"
           "video"
           "audio"
           "networkmanager"
