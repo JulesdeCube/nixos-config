@@ -2,26 +2,23 @@
   description = "Jules de Cube system configuration";
 
   inputs = {
-    iac.url = "git+https://gitlab.julesdecube.com/infra/iac";
-
-    nixpkgs.follows = "iac/nixpkgs";
-    pre-commit-hooks.follows = "iac/pre-commit-hooks";
-    futils.follows = "iac/futils";
+    snowball.url = "git+https://gitlab.julesdecube.com/infra/snowball.git";
+    nixpkgs.follows = "snowball/nixpkgs";
+    git-hooks.follows = "snowball/git-hooks";
+    flake-utils.follows = "snowball/flake-utils";
+    home-manager.follows = "jdc-home-manager/home-manager";
 
     jdc-home-manager = {
-      url = "git+https://gitlab.julesdecube.com/julesdecube/home-manager";
+      url = "git+https://gitlab.julesdecube.com/julesdecube/home-manager.git";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "futils";
+        snowball.follows = "snowball";
       };
     };
-
-    home-manager.follows = "jdc-home-manager/home-manager";
   };
 
-  outputs = { self, nixpkgs, jdc-home-manager, futils, pre-commit-hooks, ... } @ attrs:
+  outputs = { self, nixpkgs, jdc-home-manager, flake-utils, git-hooks, ... } @ attrs:
     let
-      inherit (futils.lib) eachDefaultSystem;
+      inherit (flake-utils.lib) eachDefaultSystem;
 
       pkgImport = pkgs: system:
         import pkgs {
@@ -48,8 +45,8 @@
       systemOutput = system:
         let
           pkgs = pkgImport nixpkgs system;
-          hook = pre-commit-hooks.lib.${system};
-          tools = import "${pre-commit-hooks}/nix/call-tools.nix" pkgs;
+          hook = git-hooks.lib.${system};
+          tools = import "${git-hooks}/nix/call-tools.nix" pkgs;
         in
         rec {
           checks.pre-commit-check = hook.run {
