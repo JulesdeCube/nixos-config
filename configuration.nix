@@ -181,7 +181,12 @@
 
   home-manager = {
     useGlobalPkgs = true;
-    users.jules = "${jdc-home-manager}/home.nix";
+    users.jules = { ... }: {
+      imports = [
+        jdc-home-manager.homeManagerModules.x86_64-linux.default
+      ];
+      home.stateVersion = "22.11";
+    };
   };
 
   users = {
