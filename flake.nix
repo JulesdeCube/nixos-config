@@ -40,9 +40,14 @@
             ];
           };
 
-
           "nixos-jules-portable.julesdecube.com" = default;
           nixos-jules-portable = default;
+
+
+          yubikey = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [ ./yubikey.nix ];
+          };
         };
       };
 
