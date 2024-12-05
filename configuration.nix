@@ -1,14 +1,19 @@
-{ jdc-home-manager, home-manager, pkgs, ... }:
+{ jdc-home-manager, home-manager, config, pkgs, ... }:
 {
+  # Extract configuration
   imports = [
+    # Specific hardware configuration
     ./hardware-configuration.nix
+    # Home-manager overlay
     home-manager.nixosModules.default
   ];
 
+  # Allow unfree
   nixpkgs.config = {
     allowUnfree = true;
   };
 
+  # Enable flake
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = "
@@ -16,33 +21,40 @@
     ";
   };
 
-  programs.hyprland.enable = true;
-  # Optional, hint electron apps to use wayland:
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
+  # Boot config
   boot = {
+    # Enable grub
     loader = {
+      # enable efi
       efi.canTouchEfiVariables = true;
 
       grub = {
         enable = true;
-        efiSupport = true;
         device = "nodev";
+        efiSupport = true;
         useOSProber = true;
       };
     };
 
+    # enable aarch64 arch emulation (for cross compilling)
     binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-    kernel.sysctl."kernel.hostname" = "nixos-jules-portable.julesdecube.com";
+    # define hostname to fqdn
+    kernel.sysctl."kernel.hostname" = config.networking.fqdnOrHostName;
   };
 
+  # Set time zone
   time.timeZone = "Europe/Paris";
+  # Set default location
   i18n.defaultLocale = "en_US.UTF-8";
 
+  # TTY configuration
   console = {
+    # Font
     font = "Lat2-Terminus16";
+    # Keymap to qwerty
     keyMap = "us";
+    # Colors
     colors = [
       "2D2A2E" # black/background
       "FF6188" # red
@@ -63,58 +75,81 @@
     ];
   };
 
+  # Network configuration
   networking = {
+    # hostname
     hostName = "nixos-jules-portable";
+    # domain
     domain = "julesdecube.com";
 
-    wireless.enable = false;
+    # Use networkmanager for network configuration
     networkmanager = {
+      # Enable networkmanager
       enable = true;
+      # Add pluging for vpn
       plugins = with pkgs; [
+        # Enable openvpn vpn
         networkmanager-openvpn
       ];
-    };
-
-    firewall = {
-      checkReversePath = true;
-      enable = true;
     };
   };
 
   hardware = {
-    bluetooth.enable = true;
-    pulseaudio.enable = true;
-    opengl = {
+    # Enable bluetooth
+    bluetooth = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
     };
+    # Enable nvidia driver
     nvidia = {
-      modesetting.enable = true;
+      open = true;
     };
   };
 
+  # systemd services configuration
   systemd = {
-    services.NetworkManager-wait-online.enable = false;
+    # Services ovewrite
+    services = {
+      # Disable network manager wait online
+      # see https://github.com/NixOS/nixpkgs/issues/180175
+      # TODO remove when fix
+      NetworkManager-wait-online.enable = false;
+    };
   };
 
-  security.polkit.enable = true;
 
+  # Services
   services = {
-    xserver = {
+    # GnuPG yubikey
+    pcscd = {
       enable = true;
+    };
+    # Display manager
+    xserver = {
+      # Enable graphical interface
+      enable = true;
+      # Use Nvidia driver
       videoDrivers = [ "nvidia" ];
 
+      # Disable xterm
       desktopManager.xterm.enable = false;
+      # Use gdm as manager
       displayManager.gdm.enable = true;
 
+      # Configure  keyboard
       xkb = {
+        # Use QWERTY keyboard
         layout = "us";
+        # Use international variante
         variant = "intl";
+        # Switch capslock to escape key
         options = "caps:escape";
       };
     };
 
+    # Wayland input
+    libinput.enable = true;
+
+    # Custom session package to user specify Wayland
     displayManager.sessionPackages = [
       (pkgs.stdenv.mkDerivation {
         passthru.providedSessions = [ "xservice-wayland" ];
@@ -135,56 +170,62 @@
       })
     ];
 
+    # Enable gnome keyring for secret management
+    gnome.gnome-keyring.enable = true;
 
-    libinput.enable = true;
-
+    # Enable finger print
     fprintd = {
       enable = true;
+      # Touch OEM Drivers
       tod = {
         enable = true;
         driver = pkgs.libfprint-2-tod1-vfs0090;
       };
     };
 
-    gnome.gnome-keyring.enable = true;
-
+    # Enable udev for yubikey
     udev = {
       enable = true;
       packages = [ pkgs.yubikey-personalization ];
     };
   };
 
+  # Program configuration
   programs = {
+    # Enable fish
     fish.enable = true;
 
+    # Enable network manager applet
     nm-applet = {
       enable = true;
       indicator = true;
     };
 
-    ssh.startAgent = false;
-
-    dconf.enable = true;
-
+    # Enable gpg-agent
     gnupg.agent = {
       enable = true;
+      # Enable SSH via GPG
       enableSSHSupport = true;
     };
   };
 
+  # Security
   security = {
-    pam.services = {
-      login.fprintAuth = true;
-      xscreensaver.fprintAuth = true;
-    };
+    # Enable polkit
+    polkit.enable = true;
   };
 
+  # Enable user configuration
   home-manager = {
+    # Use global packages
     useGlobalPkgs = true;
+    # Main user configuration
     users.jules = { ... }: {
       imports = [
+        # Use configuration from jdc-home-manager flake
         jdc-home-manager.homeManagerModules.x86_64-linux.default
       ];
+      # nix home manager internal state
       home.stateVersion = "22.11";
     };
   };
@@ -219,6 +260,7 @@
     };
   };
 
+  # System wide packages
   environment.systemPackages = with pkgs; [
     git
     vim
@@ -234,5 +276,6 @@
     man-pages-posix
   ];
 
+  # Nix internal db state version
   system.stateVersion = "24.05";
 }
