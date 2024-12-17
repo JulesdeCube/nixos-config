@@ -85,6 +85,11 @@
     networkmanager = {
       # Enable networkmanager
       enable = true;
+      # don't use wpa_supliant as wifi backend
+      wifi = {
+        backend = "iwd";
+      };
+
       # Add pluging for vpn
       plugins = with pkgs; [
         # Enable openvpn vpn
