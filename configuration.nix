@@ -123,6 +123,10 @@
 
   # Services
   services = {
+    # View power status
+    upower = {
+      enable = true;
+    };
     # GnuPG yubikey
     pcscd = {
       enable = true;
