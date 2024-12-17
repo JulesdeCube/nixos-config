@@ -213,13 +213,6 @@
       enable = true;
       indicator = true;
     };
-
-    # Enable gpg-agent
-    gnupg.agent = {
-      enable = true;
-      # Enable SSH via GPG
-      enableSSHSupport = true;
-    };
   };
 
   # Security
