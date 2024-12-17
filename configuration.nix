@@ -127,6 +127,11 @@
     upower = {
       enable = true;
     };
+    # Manage Sound
+    pipewire = {
+      enable = true;
+      wireplumber.enable = true;
+    };
     # GnuPG yubikey
     pcscd = {
       enable = true;
